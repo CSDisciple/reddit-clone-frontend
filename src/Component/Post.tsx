@@ -16,11 +16,6 @@ const Post: React.FC<{}> = () => {
         setError(error);
       });
   }, []);
-  //   Object.values(postData).forEach(value => {
-  //     for(let key in value){
-  //         console.log("Key ", key, "Value",value[key])
-  //     }
-  //  });
 
   return (
     <table>
