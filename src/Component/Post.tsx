@@ -1,36 +1,40 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import PostAPI from "../API/PostAPI";
-interface PostProps {
-  postId: [];
-}
+import { PostObj } from "../API/PostAPI";
 
-const Post: React.FC<PostProps> = () => {
-  const [postData, setPostData] = useState([]);
+
+const Post: React.FC<{}> = () => {
+  const [postData, setPostData] = useState<PostObj[]>();
   const [error, setError] = useState(null);
-  const apiPath = "http://localhost:8080/api/posts/getAllPosts";
   useEffect(() => {
-    axios
-      .get(apiPath)
+    PostAPI.getPosts()
       .then((response) => {
         setPostData(response.data);
-        console.log(response.data[0]);
       })
       .catch((error) => {
         setError(error);
       });
   }, []);
-let loadData = () => {
-  for(let key in postData[0]){
-    console.log("Key "+ key, "value " + postData[0][key])
-    return "Key "+ key + "value " + postData[0][key];
-  }
-}
+  //   Object.values(postData).forEach(value => {
+  //     for(let key in value){
+  //         console.log("Key ", key, "Value",value[key])
+  //     }
+  //  });
 
   return (
-    <>
-      <div>{loadData()}</div>
-    </>
+    <table>
+      <thead>Hello World</thead>
+      <tbody>
+        {postData?.map((key, index) => (
+          <tr key={index}>
+            <td>{key.subredditName}</td>
+            <td>{key.postName}</td>
+            <td>{key.description}</td>
+          </tr>
+          ))}
+      </tbody>
+    </table>
   );
 };
 

@@ -4,10 +4,9 @@ import './App.css';
 import Post from './Component/Post';
 
 function App() {
+  
   return (
-    <div className="App">
-      <Post postId={[]}/>
-    </div>
+      <Post/>
   );
 }
 
