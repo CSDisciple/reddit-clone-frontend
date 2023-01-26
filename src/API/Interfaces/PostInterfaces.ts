@@ -11,3 +11,9 @@ export interface PostObj {
     "upVote": boolean,
     "downVote": boolean
 }
+export interface PostCreateObj {
+    "subredditName": string | undefined,
+    "postName": string | undefined,
+    "url": string | undefined,
+    "description": string | undefined
+}

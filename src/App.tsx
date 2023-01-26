@@ -11,14 +11,16 @@ function App() {
     PostAPI.getPosts()
       .then((response) => {
         setPostData(response.data);
+        //throw new Error("Hello darkness my old friend!");
       })
       .catch((error) => {
+        console.log(error)
         setError(error);
       });
   }, []);
 
   return (
-     error ? error : <UserPost data = {postData}/>
+     error ? error : <UserPost props = {postData}/>
   );
 }
 
