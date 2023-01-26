@@ -17,3 +17,14 @@ export interface PostCreateObj {
     "url": string | undefined,
     "description": string | undefined
 }
+export interface LoginType{
+    "username": string
+    "password": string
+}
+
+export interface AuthenticationResponse{
+    authenticationToken: string;
+    refreshToken: string;
+    expiresAt: number;
+    username: string
+}

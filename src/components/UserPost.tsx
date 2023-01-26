@@ -1,47 +1,29 @@
 import React, { FC, useEffect, useState } from "react";
-import PostAPI from "../API/PostAPI";
-import { PostCreateObj, PostObj } from "../API/Interfaces/PostInterfaces";
+import BackEndCall from "../API/PostAPI";
+import { PostObj } from "../API/Interfaces/PostInterfaces";
 import "./UserPost.css";
 
 type UserProps = {
   props: PostObj[];
 };
-let createData: PostCreateObj = {
-  subredditName: undefined ,
-  postName: undefined,
-  url: undefined,
-  description: undefined,
-};
-const UserPost: FC<UserProps> = ({ props }: UserProps) => {
-  const [inputVal, setInputVal] = useState<PostCreateObj>(createData);
-  const [subredditName, setSubredditName] = useState<string>();
-  const [postName, setPostName] = useState<string>();
-  const [url, setUrl] = useState<string>();
-  const [description, setDescription] = useState<string>();
-  // const [error, setError] = useState(null);
-  // useEffect(() => {
-  //   PostAPI.getPosts()
-  //     .then((response) => {
-  //       setPostData(response.data);
-  //     })
-  //     .catch((error) => {
-  //       setError(error);
-  //     });
-  // }, []);
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputVal({ ...inputVal, [event.target.name]: event.target.value });
 
-    console.log(inputVal)
+const UserPost: FC<UserProps> = ({ props }: UserProps) => {
+  const [post, setPost] = useState({
+    subredditName: undefined,
+    postName: undefined,
+    url: undefined,
+    description: undefined,
+  });
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPost({ ...post, [event.target.name]: event.target.value });
+
+    console.log(post);
   };
-  const dataObject: PostCreateObj = {
-    subredditName: subredditName,
-    postName: postName,
-    url: url,
-    description: description,
-  };
-  const handleSubmit = (event: any) => {
+
+  const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    PostAPI.createPost(inputVal)
+    BackEndCall.createPost(post)
       .then((response) => {
         console.log(response);
       })
@@ -55,15 +37,15 @@ const UserPost: FC<UserProps> = ({ props }: UserProps) => {
     <div>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="exampleInputEmail1">Subreddit Name</label>
+          <label htmlFor="subredditName">Subreddit Name</label>
           <input
             type="text"
             className="form-control"
-            id="exampleInputEmail1"
+            id="subredditName"
             aria-describedby="emailHelp"
             placeholder="Enter subreddit name"
             name="subredditName"
-            value={subredditName}
+            value={post.subredditName}
             onChange={handleChange}
           />
           <small id="emailHelp" className="form-text text-muted">
@@ -71,38 +53,38 @@ const UserPost: FC<UserProps> = ({ props }: UserProps) => {
           </small>
         </div>
         <div className="form-group">
-          <label htmlFor="exampleInputPassword1">Post Name</label>
+          <label htmlFor="postName">Post Name</label>
           <input
             type="text"
             className="form-control"
-            id="exampleInputPassword1"
             placeholder="Enter post name"
             name="postName"
-            value={postName}
+            id="postName"
+            value={post.postName}
             onChange={handleChange}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="exampleInputPassword1">URL</label>
+          <label htmlFor="url">URL</label>
           <input
             type="text"
             className="form-control"
-            id="exampleInputPassword1"
             placeholder="Enter url"
             name="url"
-            value={url}
+            id="url"
+            value={post.url}
             onChange={handleChange}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="exampleInputPassword1">Description</label>
+          <label htmlFor="description">Description</label>
           <input
             type="text"
             className="form-control"
-            id="exampleInputPassword1"
+            id="description"
             placeholder="Enter Description"
             name="description"
-            value={description}
+            value={post.description}
             onChange={handleChange}
           />
         </div>

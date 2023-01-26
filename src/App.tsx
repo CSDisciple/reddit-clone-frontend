@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import UserPost from './components/UserPost';
-import {PostObj} from './API/Interfaces/PostInterfaces'
-import PostAPI from './API/PostAPI';
+import React, { useEffect, useState } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import UserPost from "./components/UserPost";
+import { PostObj } from "./API/Interfaces/PostInterfaces";
+import PostAPI from "./API/PostAPI";
+import Login from "./components/Login";
+
 function App() {
   const [postData, setPostData] = useState<PostObj[]>([]);
   const [error, setError] = useState(null);
@@ -14,13 +16,16 @@ function App() {
         //throw new Error("Hello darkness my old friend!");
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         setError(error);
       });
   }, []);
 
   return (
-     error ? error : <UserPost props = {postData}/>
+    <div>
+      <Login />
+      <UserPost props={postData} />
+    </div>
   );
 }
 
