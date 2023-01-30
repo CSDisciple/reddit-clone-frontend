@@ -11,20 +11,24 @@ export interface PostObj {
     "upVote": boolean,
     "downVote": boolean
 }
-export interface PostCreateObj {
+export interface PostCreateBody {
     "subredditName": string | undefined,
     "postName": string | undefined,
     "url": string | undefined,
     "description": string | undefined
 }
-export interface LoginType{
+export interface LoginType {
     "username": string
     "password": string
 }
 
-export interface AuthenticationResponse{
+export interface AuthenticationResponse {
     authenticationToken: string;
     refreshToken: string;
     expiresAt: number;
     username: string
+}
+export interface SubredditCreateBody {
+    "name": string;
+    "description": string;
 }

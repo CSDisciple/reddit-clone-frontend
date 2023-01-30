@@ -1,31 +1,28 @@
 import { useState } from "react";
-import BackEndCall from "../API/PostAPI";
+import PostSubredditAPI from "../API/PostSubredditAPI";
+import "./Login.css";
 
-import { AuthenticationResponse } from "../API/Interfaces/PostInterfaces";
-
-let bearerToken;
-let refreshToken;
 const Login = () => {
+  let loginToken;
   const [userLoginInfo, setUserLoginInfo] = useState({
     username: "swoleks",
     password: "unityGod123",
   });
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserLoginInfo({
       ...userLoginInfo,
       [event.target.name]: event.target.value,
     });
-
-    console.log(userLoginInfo);
   };
 
   const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const isLoggedIn = BackEndCall.login(userLoginInfo)
-    if(isLoggedIn){
-      
+    try {
+      loginToken = PostSubredditAPI.logInToken(userLoginInfo);
+    } catch (e: any) {
+      alert(e.message);
     }
-
   };
   return (
     <form onSubmit={handleSubmit}>

@@ -8,7 +8,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import UserPost from "./components/UserPost";
 import Login from "./components/Login";
 import { PostObj } from "./API/Interfaces/PostInterfaces";
-import PostAPI from "./API/PostAPI";
+import PostAPI from "./API/PostSubredditAPI";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );

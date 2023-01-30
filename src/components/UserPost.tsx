@@ -1,13 +1,16 @@
 import React, { FC, useEffect, useState } from "react";
-import BackEndCall from "../API/PostAPI";
+import BackEndCall from "../API/PostSubredditAPI";
 import { PostObj } from "../API/Interfaces/PostInterfaces";
+import PostAPI from "../API/PostSubredditAPI";
 import "./UserPost.css";
 
 type UserProps = {
   props: PostObj[];
 };
 
-const UserPost: FC<UserProps> = ({ props }: UserProps) => {
+const UserPost: FC = () => {
+  const [postData, setPostData] = useState<PostObj[]>([]);
+  const [error, setError] = useState(null);
   const [post, setPost] = useState({
     subredditName: undefined,
     postName: undefined,
@@ -15,17 +18,31 @@ const UserPost: FC<UserProps> = ({ props }: UserProps) => {
     description: undefined,
   });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPost({ ...post, [event.target.name]: event.target.value });
+  useEffect(() => {
+    PostAPI.getPosts()
+      .then((response) => {
+        setPostData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        setError(error);
+      });
+  }, []);
 
-    console.log(post);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPost((prevState) => {
+      return { ...prevState, [event.target.name]: event.target.value }; //this is better
+    });
+    //setPost({ ...post, [event.target.name]: event.target.value }); this is not an ideal way to set the state when we depend on a prev state
   };
 
-  const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
+  const handleCreatePostSubmit = (
+    event: React.ChangeEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
     BackEndCall.createPost(post)
       .then((response) => {
-        console.log(response);
+        alert("Success!");
       })
       .catch((error) => {
         console.log(error);
@@ -35,7 +52,7 @@ const UserPost: FC<UserProps> = ({ props }: UserProps) => {
   // handle user input and create a post request data object
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleCreatePostSubmit}>
         <div className="form-group">
           <label htmlFor="subredditName">Subreddit Name</label>
           <input
@@ -46,7 +63,7 @@ const UserPost: FC<UserProps> = ({ props }: UserProps) => {
             placeholder="Enter subreddit name"
             name="subredditName"
             value={post.subredditName}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
           <small id="emailHelp" className="form-text text-muted">
             We'll never share your email with anyone else.
@@ -61,7 +78,7 @@ const UserPost: FC<UserProps> = ({ props }: UserProps) => {
             name="postName"
             id="postName"
             value={post.postName}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div className="form-group">
@@ -73,7 +90,7 @@ const UserPost: FC<UserProps> = ({ props }: UserProps) => {
             name="url"
             id="url"
             value={post.url}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div className="form-group">
@@ -85,7 +102,7 @@ const UserPost: FC<UserProps> = ({ props }: UserProps) => {
             placeholder="Enter Description"
             name="description"
             value={post.description}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -94,9 +111,8 @@ const UserPost: FC<UserProps> = ({ props }: UserProps) => {
         </button>
       </form>
       <table className="table table-striped">
-        <thead>Hello World</thead>
         <tbody>
-          {props.map((postKey, index) => (
+          {postData.map((postKey, index) => (
             <tr key={index}>
               <td>{postKey.subredditName}</td>
               <td>{postKey.postName}</td>
